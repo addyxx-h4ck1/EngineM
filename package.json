@@ -1,0 +1,14 @@
+{
+  "name": "emginem",
+  "version": "1.0.0",
+  "private": "true",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:frontend": "cd apps/client && npm run dev",
+    "dev:backend": "cd apps/server && npm run dev"
+  }
+}

@@ -1,0 +1,212 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth !important;
+}
+
+@layer utilities {
+  /* navbar media queries */
+  .hambager {
+    display: none !important;
+  }
+  .navbar {
+    padding: 1rem;
+  }
+  @media screen and (max-width: 817px) {
+    .hambager {
+      display: block !important;
+    }
+    .navlinks,
+    .themebtn {
+      display: none !important;
+    }
+    .navbar {
+      justify-content: space-between;
+    }
+  }
+  @media screen and (min-width: 817px) {
+    .sidebar {
+      display: none !important;
+    }
+  }
+  /* navbar media queries */
+  /* Hero section */
+  .heroh {
+    font-size: clamp(2.7rem, 10.2vw, 4.5rem) !important;
+    line-height: 1 !important;
+  }
+  .herod {
+    font-size: clamp(2rem, 10.2vw, 3.5rem) !important;
+    line-height: 1 !important;
+  }
+  .herof {
+    font-size: clamp(2.2rem, 10.2vw, 3.5rem) !important;
+    line-height: 1 !important;
+  }
+
+  /* Hero section */
+
+  /* API KEY FEATURES */
+  @media screen and (max-width: 750px) {
+  }
+  /* API KEY FEATURES */
+
+  /* USE CASES */
+  @media screen and (max-width: 970px) {
+    .usecasewrapper {
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  /* USE CASES */
+  /* SECURITY CARDS */
+  .securitycards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px; /* Adjust the gap between grid items */
+  }
+  /* SECURITY CARDS */
+
+  /* HELP CENTER TOPICS CARD */
+  .topics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px; /* Adjust the gap between grid items */
+  }
+  /* HELP CENTER TOPICS CARD */
+
+  /* DASHBOARD */
+  @media screen and (max-width: 768px) {
+    .mobileaside {
+      display: sticky !important;
+    }
+    .desktopaside {
+      display: none !important;
+    }
+    .desktoptoogle {
+      display: none !important;
+    }
+    .mobiletoogle {
+      display: block !important;
+    }
+  }
+  @media screen and (min-width: 769px) {
+    .mobileaside {
+      display: none !important;
+    }
+    .desktopaside {
+      display: sticky !important;
+    }
+    .desktoptoogle {
+      display: block !important;
+    }
+    .mobiletoogle {
+      display: none !important;
+    }
+  }
+  .statcard-parent {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px; /* Adjust the gap between grid items */
+  }
+  .intergrations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px; /* Adjust the gap between grid items */
+  }
+
+  .dashboard-banner {
+  }
+  /* DASHBOARD */
+
+  /* FOOTER */
+
+  .footer-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px; /* Adjust the gap between grid items */
+  }
+  @media screen and (max-width: 700px) {
+    .footer-wrapper {
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+  }
+  /* FOOTER */
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Custom scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px; /* Width of the entire scrollbar */
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: theme(
+      'colors.scrollbar-bg'
+    ); /* Background of the scrollbar track */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: theme(
+      'colors.scrollbar-thumb'
+    ); /* Color of the scroll thumb */
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: theme(
+      'colors.scrollbar-thumb-hover'
+    ); /* Hover state for scroll thumb */
+  }
+  /* Custom scrollbar styling */
+  @media screen and (min-width: 800px) {
+    .scrollable-container {
+      overflow: hidden; /* Hide scrollbar by default */
+    }
+
+    /* Show scrollbar on hover */
+    .scrollable-container:hover {
+      overflow: auto; /* Show scrollbar when hovering */
+    }
+  }
+
+  .scrollable-container::-webkit-scrollbar {
+    width: 8px; /* Width of the entire scrollbar */
+  }
+
+  .scrollable-container::-webkit-scrollbar-track {
+    background-color: #171634af; /* Background of the scrollbar track */
+  }
+
+  .scrollable-container::-webkit-scrollbar-thumb {
+    background-color: #171634af; /* Color of the scroll thumb */
+    border-radius: 4px;
+  }
+
+  .scrollable-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Hover state for scroll thumb */
+  }
+
+  /* SKELETON */
+  .loader-skeleton {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px; /* Adjust the gap between grid items */
+  }
+  @media screen and (max-width: 300px) {
+    .loader-skeleton {
+      display: block !important;
+    }
+    .loader-skeleton article {
+      width: 100% !important;
+    }
+  }
+}
