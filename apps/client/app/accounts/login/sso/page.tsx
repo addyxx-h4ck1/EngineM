@@ -1,82 +1,63 @@
 'use client';
-import Logo from '../../components/logo';
-import { useRef, useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import { useActionState, useEffect } from 'react';
 import { useNotification } from '@/app/context/NotiContext';
-import nookies from 'nookies';
+import { ssoLoginAction } from '@/app/(actions)/login-action';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { useFormStatus } from 'react-dom';
+import { redirect } from 'next/navigation';
+
+export interface AuthReturnTypes {
+  success: { message: string };
+  error: { message: string };
+}
+
+const initialState: AuthReturnTypes = {
+  success: { message: '' },
+  error: { message: '' },
+};
 
 const Page = () => {
+  const [state, action] = useActionState(
+    ssoLoginAction,
+    initialState as AuthReturnTypes,
+  );
   const { setNotification, clearNotification } = useNotification();
-  const [inProgress, setInProgress] = useState<boolean>(false);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  //
-  const submitForm = async (e: any) => {
-    e.preventDefault();
-    if (!emailRef.current?.value.trim()) {
-      setNotification('error', 'Email field cannot be empty');
-      setTimeout(() => {
-        clearNotification();
-      }, 2000);
-      return;
-    }
-    if (!passwordRef.current?.value.trim()) {
-      setNotification('error', 'Password field cannot be empty');
-      setTimeout(() => {
-        clearNotification();
-      }, 2000);
-      return;
-    }
-    //
-    const form = new FormData(e.target);
-    const formData = Object.fromEntries(form.entries());
 
-    try {
-      setNotification('loading', 'Please wait');
-      setInProgress(true);
-      const req: AxiosResponse = await axios.post(
-        process.env.NEXT_PUBLIC_LOGIN_URL as string,
-        formData
-      );
-      setNotification('success', 'Login successful');
-      nookies.set(null, 't', req.data.t, {
-        maxAge: 24 * 60 * 60, // 1 day in seconds
-        path: '/',
-        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-        sameSite: 'Lax', // Or 'Strict' based on your needs
-      });
+  useEffect(() => {
+    if (state?.success?.message) {
+      setNotification('success', 'Success.. redirecting');
       setTimeout(() => {
         clearNotification();
-        setInProgress(false);
-        window.location.href = '/dashboard';
-      }, 2000);
-    } catch (error: any) {
-      clearNotification();
+        redirect('/dashboard');
+      }, 1000);
+    }
+
+    if (state?.error?.message) {
       setNotification(
         'error',
-        error.response.data.err || 'Internal server error'
+        state?.error?.message || 'Internal Server Error',
       );
-      setInProgress(false);
       setTimeout(() => {
         clearNotification();
-      }, 2000);
+      }, 3000);
     }
-  };
+  }, [state]);
+
   return (
-    <section className="bg-[#ecebeb] text-sm text-[#353F4F] min-h-screen flex flex-col items-center px-1 dark:text-[#FFFFFF] dark:bg-[#192330]">
-      <article className="mt-[6rem] w-[100%] p-3 max-w-[400px] py-4 rounded-lg bg-[#ffffff]  flex flex-col gap-3 dark:bg-[#1f2b3a] dark:text-[#FFFFFF]">
-        <Logo />
-        <h1 className="text-lg w-[100%] max-w-[300px]">Login</h1>
+    <section className="bg-[#ecebeb] text-sm text-[#353F4F] min-h-screen flex flex-col items-center px-3 dark:text-[#FFFFFF] dark:bg-[#192330]">
+      <article className="mt-[6rem] w-[100%] p-5 max-w-[400px] py-4 rounded-lg bg-[#ffffff]  flex flex-col gap-3 dark:bg-[#1f2b3a] dark:text-[#FFFFFF]">
+        <h1 className="text-lg w-[100%] max-w-[300px]">Welcome Back!</h1>
         {/* FORM */}
         <form
+          action={action}
           className="flex w-[100%] flex-col "
-          onSubmit={(e) => submitForm(e)}
         >
           {/* email input */}
           <div className="mb-3 flex flex-col gap-1">
             <label
               htmlFor="email"
-              className="font-semibold text-[#1b1b1ba1] dark:text-[#818181cc]"
+              className="font-semibold text-[#1b1b1ba1] dark:text-[#818181cc] text-xs"
             >
               Email
             </label>
@@ -84,16 +65,15 @@ const Page = () => {
               type="email"
               id="Email"
               name="email"
-              ref={emailRef}
               placeholder="example@gmail.com"
-              className="outline-0 border-[1.5px] border-[gray] rounded-md py-2 px-4 w-full bg-transparent "
+              className="outline-none border dark:border-[#ffffff18] focus:border-[#5680FF] p-2  dark:focus:border-[#5680FF]  rounded-md text-xs"
             />
           </div>
           {/* new password input */}
           <div className="mb-3 flex flex-col gap-1">
             <label
               htmlFor="password"
-              className="font-semibold text-[#1b1b1ba1] dark:text-[#818181cc]"
+              className="font-semibold text-[#1b1b1ba1] dark:text-[#818181cc] text-xs"
             >
               Password
             </label>
@@ -101,26 +81,43 @@ const Page = () => {
               type="password"
               id="Password"
               name="password"
-              ref={passwordRef}
               placeholder="password"
-              className="outline-0 border-[1.5px] border-[gray] rounded-md py-2 px-4 w-full bg-transparent "
+              className="outline-none border dark:border-[#ffffff18] focus:border-[#5680FF] p-2  dark:focus:border-[#5680FF]  rounded-md text-xs"
             />
           </div>
           {/* submit btn */}
-          <div className="mb-3">
-            <button
-              type={inProgress ? 'button' : 'submit'}
-              className={`text-[white] font-semibold outline-0 bg-[royalblue] rounded-md py-3 px-4 w-full hover:bg-[#688cf8] duration-300 ${
-                inProgress ? 'cursor-wait' : ''
-              }`}
-            >
-              sign in
-            </button>
-          </div>
+          <SubmitButton />
         </form>
       </article>
     </section>
   );
 };
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <div className="">
+      <button
+        className={`text-[white] font-semibold outline-0 rounded-md py-3 px-4 w-full hover:bg-[#688cf8] duration-300 ${pending ? 'bg-[#688cf8]' : 'bg-[royalblue]'}`}
+      >
+        {pending ? (
+          <div className="text-xs tracking-widest flex justify-center items-center gap-2">
+            <p>
+              <FontAwesomeIcon
+                icon={faCircleNotch}
+                className="fa-spin"
+              />
+            </p>
+            <p>please wait..</p>
+          </div>
+        ) : (
+          <>
+            <p>Login</p>
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
 
 export default Page;

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { readDB } from '../libs/save.js';
 
 export const testHandler = async (req: Request, res: Response) => {
   try {
-    let data = await readDB();
-    res.status(200).json(data);
+    res
+      .status(200)
+      .json({ status: 200, msg: 'Server is on', timestamps: new Date() });
   } catch (error) {
     res.sendStatus(500);
   }

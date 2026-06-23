@@ -14,7 +14,7 @@ router.post(
   '/api/v1/gmail',
   checkAPIKeyValidity,
   validateMailBody,
-  GmailAPIController
+  GmailAPIController,
 );
 router.get('/register', registerUser);
 router.post('/i/gmail', verifyUserToken, handleOauthcallback);
